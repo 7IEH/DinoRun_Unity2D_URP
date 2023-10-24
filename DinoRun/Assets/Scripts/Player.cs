@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 //using UnityEngine.Windows;
 
 public class Player : MonoBehaviour
@@ -9,11 +10,10 @@ public class Player : MonoBehaviour
     public enum eType
     {
         Idle
-        , Move
+        , Jump
         , None
     }
 
-    public int Speed;
     public eType Type;
     Rigidbody2D rigidbody;
     public bool mJump;
@@ -33,8 +33,8 @@ public class Player : MonoBehaviour
             case eType.Idle:
                 Idle();
                 break;
-            case eType.Move:
-                Move();
+            case eType.Jump:
+                Jump();
                 break;
             case eType.None:
                 break;
@@ -43,29 +43,15 @@ public class Player : MonoBehaviour
 
     void Idle()
     {
-        float MoveX = 0f;
-
-        if (Input.GetKey(KeyCode.A))
-        {
-            MoveX -= Time.deltaTime * Speed;
-        }
-
-        if (Input.GetKey(KeyCode.D))
-        {
-            MoveX += Time.deltaTime * Speed;
-        }
-
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (!mJump)
             {
-                Type = eType.Move;
+                Type = eType.Jump;
             }
         }
-
-        transform.Translate(new Vector3(MoveX, 0, 0));
     }
-    void Move()
+    void Jump()
     {
         Debug.Log("JUMP");
         rigidbody.AddForce(transform.up * 300f);
@@ -75,7 +61,14 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Enter");
-        mJump = false;
+        if(collision.gameObject.layer==7)
+        {
+            mJump = false;
+        }
+
+        if(collision.gameObject.layer==8)
+        {
+            SceneManager.LoadScene("PlayScene");
+        }
     }   
 }
