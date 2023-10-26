@@ -68,7 +68,7 @@ public class Player : MonoBehaviour
 
         if(collision.gameObject.layer==8)
         {
-            SceneManager.LoadScene("PlayScene");
+            //SceneManager.LoadScene("PlayScene");
         }
     }   
 }
